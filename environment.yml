@@ -1,0 +1,13 @@
+name: nlp
+channels:
+  - defaults
+dependencies:
+  - python=3.10
+  - pytorch
+  - pandas
+  - nltk
+  - spacy
+  - ipykernel
+  - notebook
+  - nb_conda_kernels
+  - ipywidgets
