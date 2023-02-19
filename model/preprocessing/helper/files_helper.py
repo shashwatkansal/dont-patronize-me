@@ -24,5 +24,5 @@ def write_dataframe(file_meta: dict, dataframe: pd.DataFrame)->None:
 '''
 Read a dataframe from a TSV file
 '''
-def read_raw_datafile(file_meta: dict) -> pd.DataFrame:
+def read_datafile(file_meta: dict) -> pd.DataFrame:
     return pd.read_csv(file_meta['filepath'], sep='\t')
