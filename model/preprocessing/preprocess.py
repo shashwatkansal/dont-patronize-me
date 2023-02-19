@@ -1,4 +1,4 @@
-from helper.read_files import read_datafile, read_split
+from helper.read_files import read_raw_datafile, read_split
 from helper.file_meta_data import CATEGORIES_DATA_FILE_META,OFFICIAL_DEV_SPLIT_FILE_META,PCL_DATA_FILE_META,TRAIN_SPLIT_FILE_META
 
 def validate_raw_data():
@@ -19,10 +19,12 @@ def validate_raw_data():
     if any(set(raw_training_data_split_df['par_id']).union(set(official_dev_split_df['par_id'])).symmetric_difference(set(pcl_df['par_id']))):
         raise Exception('Not all data values in split', (len(raw_training_data_split_df['par_id']) + len(official_dev_split_df['par_id'])), "versus", len(pcl_df['par_id']))
     print("Success")
+    
+    # TODO: Add validation for Category data once we know if we care about it
 
 if __name__ == '__main__':
-    categories_df = read_datafile(CATEGORIES_DATA_FILE_META)
-    pcl_df = read_datafile(PCL_DATA_FILE_META)
+    categories_df = read_raw_datafile(CATEGORIES_DATA_FILE_META)
+    pcl_df = read_raw_datafile(PCL_DATA_FILE_META)
     raw_training_data_split_df = read_split(TRAIN_SPLIT_FILE_META)
     official_dev_split_df = read_split(OFFICIAL_DEV_SPLIT_FILE_META)
     validate_raw_data()
