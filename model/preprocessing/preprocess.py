@@ -14,8 +14,9 @@ def validate_raw_data():
         raise Exception("Sets not disjoint")
     print("Success")
     
+    # Check all PCL data is split
     print("Checking split size totals dataset...", end='')
-    if (len(raw_training_data_split_df['par_id']) + len(official_dev_split_df['par_id'])) != len(pcl_df['par_id']):
+    if any(set(raw_training_data_split_df['par_id']).union(set(official_dev_split_df['par_id'])).symmetric_difference(set(pcl_df['par_id']))):
         raise Exception('Not all data values in split', (len(raw_training_data_split_df['par_id']) + len(official_dev_split_df['par_id'])), "versus", len(pcl_df['par_id']))
     print("Success")
 
