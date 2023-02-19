@@ -15,3 +15,12 @@ TRAIN_SPLIT_FILE_META = {
 OFFICIAL_DEV_SPLIT_FILE_META = {
     'filepath': './data/splits/dev_semeval_parids-labels.csv'
 }
+
+OFFICIAL_DEV_PCL_DATA_FILE_META = {
+    'filepath': './data/dontpatronizeme_pcl_dev.tsv'
+}
+
+TRAINING_PCL_DATA_FILE_META = {
+    'filepath': './data/dontpatronizeme_pcl_training.tsv'
+}
+

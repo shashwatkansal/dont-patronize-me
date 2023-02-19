@@ -14,3 +14,10 @@ Read the CSV data file
 def read_split(file_meta: dict) -> pd.DataFrame:
     df = pd.read_csv(file_meta['filepath'])
     return df
+
+'''
+Print a DF to a TSV file
+'''
+def write_dataframe(file_meta: dict, dataframe: pd.DataFrame)->None:
+    print("Writing to TSV:", file_meta['filepath'])
+    dataframe.to_csv(file_meta['filepath'], sep='\t', index=False)
