@@ -62,14 +62,7 @@ def split_pcl_data(
         official_dev_split_df: pd.DataFrame,
 ) -> tuple[pd.DataFrame, pd.DataFrame]:
     official_dev_data_df = pcl_df.merge(official_dev_split_df, on="par_id")
-    official_dev_data_df = official_dev_data_df.rename(
-        columns={"labels": "annotator_label"}
-    )
-
     official_training_data_df = pcl_df.merge(train_split_df, on="par_id")
-    official_training_data_df = official_training_data_df.rename(
-        columns={"labels": "annotator_label"}
-    )
 
     return official_dev_data_df, official_training_data_df
 
