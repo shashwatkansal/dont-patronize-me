@@ -6,6 +6,7 @@ from preprocessing.file_metadata import (
     OFFICIAL_DEV_PCL_DATA_FILE_META,
     OFFICIAL_DEV_SPLIT_FILE_META,
     PCL_DATA_FILE_META,
+    SPLIT_FILE_ANNOTATOR_COLUMN_NAMES,
     TRAIN_SPLIT_FILE_META,
     TRAINING_PCL_DATA_FILE_META,
 )
@@ -41,7 +42,10 @@ def validate_raw_data(
     print("Success")
 
     # TODO: Add validation for Category data once we know if we care about it.
-
+    
+def expand_split_data_columns(split_df: pd.DataFrame):
+    new_df = pd.DataFrame(split_df['label'].to_list(), SPLIT_FILE_ANNOTATOR_COLUMN_NAMES);
+    print(new_df)
 
 def split_pcl_data(
     pcl_df: pd.DataFrame,
@@ -68,7 +72,8 @@ def main() -> None:
     train_split_df = read_split(TRAIN_SPLIT_FILE_META)
     official_dev_split_df = read_split(OFFICIAL_DEV_SPLIT_FILE_META)
     validate_raw_data(pcl_df, categories_df, train_split_df, official_dev_split_df)
-
+    
+    expand_split_data_columns(train_split_df)
     # Split the pcl data according to the splits.
     official_dev_data_df, official_training_data_df = split_pcl_data(pcl_df, train_split_df, official_dev_split_df)
 

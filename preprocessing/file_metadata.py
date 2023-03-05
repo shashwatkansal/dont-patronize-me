@@ -31,10 +31,20 @@ CATEGORIES_DATA_FILE_META = FileMeta(
         "span_start",
         "span_finish",
         "span_text",
-        "pcl_category",
+        "pcl_category", 
         "number_of_annotators",
     ],
 )
+
+# The name mappings for the array 'label' in labels split CSVs
+SPLIT_FILE_ANNOTATOR_COLUMN_NAMES = [
+    'Unbalanced_power_relations', 
+    'Shallow_solution', 
+    'Presupposition', 
+    'Authority_voice', 
+    'Metaphors', 
+    'Compassion'
+]
 
 
 # The file where the training data split by paragraph id (par_id) is stored.
@@ -47,7 +57,7 @@ TRAIN_SPLIT_FILE_META = FileMeta(
 OFFICIAL_DEV_SPLIT_FILE_META = FileMeta(
     filepath=DATA_SPLITS_DIR / "dev_semeval_parids-labels.csv",
 )
-
+ 
 
 # The file where the dev pcl data is stored.
 OFFICIAL_DEV_PCL_DATA_FILE_META = FileMeta(
