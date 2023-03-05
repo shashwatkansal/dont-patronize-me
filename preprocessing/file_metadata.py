@@ -43,7 +43,8 @@ SPLIT_FILE_ANNOTATOR_COLUMN_NAMES = [
     'Presupposition', 
     'Authority_voice', 
     'Metaphors', 
-    'Compassion'
+    'Compassion',
+    'The_poorer_the_merrier'
 ]
 
 

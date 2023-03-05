@@ -1,4 +1,5 @@
 import pandas as pd
+import ast
 
 from preprocessing.file_io import read_raw_datafile, read_split, write_dataframe
 from preprocessing.file_metadata import (
@@ -8,15 +9,15 @@ from preprocessing.file_metadata import (
     PCL_DATA_FILE_META,
     SPLIT_FILE_ANNOTATOR_COLUMN_NAMES,
     TRAIN_SPLIT_FILE_META,
-    TRAINING_PCL_DATA_FILE_META,
+    TRAINING_PCL_DATA_FILE_META, FileMeta,
 )
 
 
 def validate_raw_data(
-    pcl_df: pd.DataFrame,
-    categories_df: pd.DataFrame,
-    train_split_df: pd.DataFrame,
-    official_dev_split_df: pd.DataFrame,
+        pcl_df: pd.DataFrame,
+        categories_df: pd.DataFrame,
+        train_split_df: pd.DataFrame,
+        official_dev_split_df: pd.DataFrame,
 ) -> None:
     print("Checking for duplicate `par_id`s in the pcl and split datasets...", end="")
     for df in (pcl_df, train_split_df, official_dev_split_df):
@@ -42,24 +43,32 @@ def validate_raw_data(
     print("Success")
 
     # TODO: Add validation for Category data once we know if we care about it.
-    
-def expand_split_data_columns(split_df: pd.DataFrame):
-    new_df = pd.DataFrame(split_df['label'].to_list(), SPLIT_FILE_ANNOTATOR_COLUMN_NAMES);
-    print(new_df)
+
+
+def read_expand_split_data_columns(file_meta: FileMeta):
+    split_df = read_split(file_meta)
+    # Literally evaluate the array string to an list
+    label_as_array = [ast.literal_eval(x) for x in split_df['label']]
+    # Split the array into booleans for each type of PCL
+    expanded_df = pd.DataFrame(label_as_array, columns=SPLIT_FILE_ANNOTATOR_COLUMN_NAMES).astype(bool)
+    # Add the paragraph id column back
+    expanded_df['par_id'] = split_df['par_id'];
+    return expanded_df
+
 
 def split_pcl_data(
-    pcl_df: pd.DataFrame,
-    train_split_df: pd.DataFrame,
-    official_dev_split_df: pd.DataFrame,
+        pcl_df: pd.DataFrame,
+        train_split_df: pd.DataFrame,
+        official_dev_split_df: pd.DataFrame,
 ) -> tuple[pd.DataFrame, pd.DataFrame]:
     official_dev_data_df = pcl_df.merge(official_dev_split_df, on="par_id")
     official_dev_data_df = official_dev_data_df.rename(
-        columns={"label_x": "class_labels", "label_y": "annotator_label"}
+        columns={"labels": "annotator_label"}
     )
 
     official_training_data_df = pcl_df.merge(train_split_df, on="par_id")
     official_training_data_df = official_training_data_df.rename(
-        columns={"label_x": "class_labels", "label_y": "annotator_label"}
+        columns={"labels": "annotator_label"}
     )
 
     return official_dev_data_df, official_training_data_df
@@ -69,11 +78,10 @@ def main() -> None:
     # Read raw data files and validate them.
     pcl_df = read_raw_datafile(PCL_DATA_FILE_META)
     categories_df = read_raw_datafile(CATEGORIES_DATA_FILE_META)
-    train_split_df = read_split(TRAIN_SPLIT_FILE_META)
-    official_dev_split_df = read_split(OFFICIAL_DEV_SPLIT_FILE_META)
+    train_split_df = read_expand_split_data_columns(TRAIN_SPLIT_FILE_META)
+    official_dev_split_df = read_expand_split_data_columns(OFFICIAL_DEV_SPLIT_FILE_META)
     validate_raw_data(pcl_df, categories_df, train_split_df, official_dev_split_df)
-    
-    expand_split_data_columns(train_split_df)
+
     # Split the pcl data according to the splits.
     official_dev_data_df, official_training_data_df = split_pcl_data(pcl_df, train_split_df, official_dev_split_df)
 
