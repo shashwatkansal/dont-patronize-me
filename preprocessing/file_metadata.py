@@ -40,7 +40,7 @@ CATEGORIES_DATA_FILE_META = FileMeta(
 TASK4_RAW_DATA_FILE_META = FileMeta(
     filepath=DATA_RAW_DIR / "task4_test.tsv",
     columns=[
-        "uuid",
+        "par_id",
         "art_id",
         "keyword",
         "country_code",
