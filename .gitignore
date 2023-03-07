@@ -2,6 +2,8 @@
 notebook-*.ipynb
 !notebook-master.ipynb
 
+.vector_cache/
+
 #
 # Below is adapted from https://github.com/github/gitignore/blob/main/Python.gitignore
 # 
