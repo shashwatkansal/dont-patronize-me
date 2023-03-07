@@ -3,10 +3,10 @@ import pandas as pd
 from .file_metadata import FileMeta
 
 
-def read_raw_datafile(file_meta: FileMeta) -> pd.DataFrame:
+def read_raw_datafile(file_meta: FileMeta, skiprows=3) -> pd.DataFrame:
     """Read the raw TSV data file, skipping the first 3 rows of disclaimers, adding in missing column headers."""
 
-    df = pd.read_csv(file_meta.filepath, sep="\t", skiprows=3, header=None)
+    df = pd.read_csv(file_meta.filepath, sep="\t", skiprows=skiprows, header=None)
 
     assert file_meta.columns is not None
     df.columns = file_meta.columns

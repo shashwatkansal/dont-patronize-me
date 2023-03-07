@@ -36,6 +36,18 @@ CATEGORIES_DATA_FILE_META = FileMeta(
     ],
 )
 
+# The file where the raw DPM category data is stored.
+TASK4_RAW_DATA_FILE_META = FileMeta(
+    filepath=DATA_RAW_DIR / "task4_test.tsv",
+    columns=[
+        "uuid",
+        "art_id",
+        "keyword",
+        "country_code",
+        "span_text",
+    ],
+)
+
 # The name mappings for the array 'label' in labels split CSVs
 SPLIT_FILE_ANNOTATOR_COLUMN_NAMES = [
     'Unbalanced_power_relations', 
@@ -69,4 +81,8 @@ OFFICIAL_DEV_PCL_DATA_FILE_META = FileMeta(
 # The file where the training pcl data is stored.
 TRAINING_PCL_DATA_FILE_META = FileMeta(
     filepath=DATA_DIR / "dontpatronizeme_pcl_training.tsv",
+)
+
+TASK4_PROCESSED_DATA_FILE_META = FileMeta(
+    filepath=DATA_DIR / "task4_test.tsv",
 )

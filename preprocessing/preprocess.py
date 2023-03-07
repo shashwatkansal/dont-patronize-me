@@ -8,6 +8,8 @@ from preprocessing.file_metadata import (
     OFFICIAL_DEV_SPLIT_FILE_META,
     PCL_DATA_FILE_META,
     SPLIT_FILE_ANNOTATOR_COLUMN_NAMES,
+    TASK4_PROCESSED_DATA_FILE_META,
+    TASK4_RAW_DATA_FILE_META,
     TRAIN_SPLIT_FILE_META,
     TRAINING_PCL_DATA_FILE_META, FileMeta,
 )
@@ -71,6 +73,8 @@ def main() -> None:
     # Read raw data files and validate them.
     pcl_df = read_raw_datafile(PCL_DATA_FILE_META)
     categories_df = read_raw_datafile(CATEGORIES_DATA_FILE_META)
+    task4_df = read_raw_datafile(TASK4_RAW_DATA_FILE_META, skiprows=0)
+
     train_split_df = read_expand_split_data_columns(TRAIN_SPLIT_FILE_META)
     official_dev_split_df = read_expand_split_data_columns(OFFICIAL_DEV_SPLIT_FILE_META)
     validate_raw_data(pcl_df, categories_df, train_split_df, official_dev_split_df)
@@ -85,6 +89,7 @@ def main() -> None:
     # Write the resulting dataframes.
     write_dataframe(official_dev_data_df, OFFICIAL_DEV_PCL_DATA_FILE_META)
     write_dataframe(official_training_data_df, TRAINING_PCL_DATA_FILE_META)
+    write_dataframe(task4_df, TASK4_PROCESSED_DATA_FILE_META)
 
 
 if __name__ == "__main__":
