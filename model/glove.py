@@ -18,11 +18,13 @@ def _build_tabular_dataset(
     label_field: Field,
     *,
     train_split: float,
+    use_dev_test: bool = True,
 ) -> tuple[Dataset, Dataset, Dataset]:
     # Prepare train, val, test data into a dataframe (to be stored temporarily in tsv file)
     X, y = get_training_data()
     X_train, X_val, y_train, y_val = train_test_split(X, y, train_size=train_split, shuffle=True)
-    X_test, y_test = get_dev_test_data()
+    # TODO: Change this to incorporate the final test dataset.
+    X_test, y_test = get_dev_test_data() if use_dev_test else get_dev_test_data()
 
     train_df = pd.DataFrame.from_dict({"text": X_train, "label": y_train})
     val_df = pd.DataFrame.from_dict({"text": X_val, "label": y_val})
@@ -58,6 +60,7 @@ def build_glove_embedding_iters(
     train_split: float = 0.8,
     batch_size: int = 32,
     max_text_length: int = 150,
+    use_dev_test: bool = True,
 ) -> tuple[Iterator, Iterator, Iterator]:
     # Define Field objects for the input text and labels.
     text_field = Field(
@@ -74,10 +77,15 @@ def build_glove_embedding_iters(
     )
 
     # Build a Dataset object for each train-val-test split.
-    train, val, test = _build_tabular_dataset(text_field, label_field, train_split=train_split)
+    train, val, test = _build_tabular_dataset(
+        text_field,
+        label_field,
+        train_split=train_split,
+        use_dev_test=use_dev_test,
+    )
 
     # Construct the Vocab object in the `text_field` using GloVe embeddings.
-    text_field.build_vocab(train, val, test, vectors=GloVe(name="8B", dim=embedding_dim))
+    text_field.build_vocab(train, val, test, vectors=GloVe(name="6B", dim=embedding_dim))
 
     # Build iterators for each splits.
     train_iter, val_iter, test_iter = Iterator.splits(
